@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gEsu2LTy6io=",
+  "dgSpecHash": "uqwY0gjfNi4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Justin\\Documents\\CEN3908C\\VSCode\\BetaBuild\\ufid_reader_stripped\\UFIDReader\\UFIDReader.csproj",
+  "projectFilePath": "C:\\Users\\Justin\\Documents\\temp\\Reader_Stripped\\UFIDReader\\UFIDReader.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Justin\\.nuget\\packages\\avalonia\\11.2.1\\avalonia.11.2.1.nupkg.sha512",
     "C:\\Users\\Justin\\.nuget\\packages\\avalonia.angle.windows.natives\\2.1.22045.20230930\\avalonia.angle.windows.natives.2.1.22045.20230930.nupkg.sha512",

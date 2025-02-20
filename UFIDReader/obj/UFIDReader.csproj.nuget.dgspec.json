@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Justin\\Documents\\CEN3908C\\VSCode\\BetaBuild\\ufid_reader_stripped\\UFIDReader\\UFIDReader.csproj": {}
+    "C:\\Users\\Justin\\Documents\\temp\\Reader_Stripped\\UFIDReader\\UFIDReader.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Justin\\Documents\\CEN3908C\\VSCode\\BetaBuild\\ufid_reader_stripped\\UFIDReader\\UFIDReader.csproj": {
+    "C:\\Users\\Justin\\Documents\\temp\\Reader_Stripped\\UFIDReader\\UFIDReader.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Justin\\Documents\\CEN3908C\\VSCode\\BetaBuild\\ufid_reader_stripped\\UFIDReader\\UFIDReader.csproj",
+        "projectUniqueName": "C:\\Users\\Justin\\Documents\\temp\\Reader_Stripped\\UFIDReader\\UFIDReader.csproj",
         "projectName": "UFIDReader",
-        "projectPath": "C:\\Users\\Justin\\Documents\\CEN3908C\\VSCode\\BetaBuild\\ufid_reader_stripped\\UFIDReader\\UFIDReader.csproj",
+        "projectPath": "C:\\Users\\Justin\\Documents\\temp\\Reader_Stripped\\UFIDReader\\UFIDReader.csproj",
         "packagesPath": "C:\\Users\\Justin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Justin\\Documents\\CEN3908C\\VSCode\\BetaBuild\\ufid_reader_stripped\\UFIDReader\\obj\\",
+        "outputPath": "C:\\Users\\Justin\\Documents\\temp\\Reader_Stripped\\UFIDReader\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Justin\\AppData\\Roaming\\NuGet\\NuGet.Config"

@@ -1,0 +1,26 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="UFID_Reader.App"
+             xmlns:local="clr-namespace:UFID_Reader"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator></local:ViewLocator>
+    </Application.DataTemplates>
+             
+    <Application.Styles>
+        <FluentTheme />
+        <StyleInclude Source="Styles/AppDefaultStyles.axaml"></StyleInclude>
+    </Application.Styles>
+             <Application.Resources>
+                 <SolidColorBrush x:Key="PrimaryBackground1">#2f2f2f</SolidColorBrush>
+                 <SolidColorBrush x:Key="PrimaryBackground2">#FFFAF1</SolidColorBrush>
+                 
+                 <SolidColorBrush x:Key="PrimaryText1">#FFFAF1</SolidColorBrush>
+                 <SolidColorBrush x:Key="PrimaryText2">#2f2f2f</SolidColorBrush>
+                 
+                 <SolidColorBrush x:Key="PrimaryHover1">#F5F5F5</SolidColorBrush>
+                 <SolidColorBrush x:Key="PrimaryHoverText1">#1F1F1F</SolidColorBrush>
+             </Application.Resources>
+</Application>

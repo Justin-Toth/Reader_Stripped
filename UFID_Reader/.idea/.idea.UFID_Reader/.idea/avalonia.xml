@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="App.axaml" value="UFID_Reader.csproj" />
+        <entry key="MainWindow.axaml" value="UFID_Reader.csproj" />
+        <entry key="Styles/AppDefaultStyles.axaml" value="UFID_Reader.csproj" />
+        <entry key="ViewModels/scan_frame.axaml" value="UFID_Reader.csproj" />
+        <entry key="Views/ScanFailure_View.axaml" value="UFID_Reader.csproj" />
+        <entry key="Views/ScanFrameBaseView.axaml" value="UFID_Reader.csproj" />
+        <entry key="Views/ScanFrameFailureView.axaml" value="UFID_Reader.csproj" />
+        <entry key="Views/ScanFrameSuccessView.axaml" value="UFID_Reader.csproj" />
+        <entry key="Views/ScanSuccess__View.axaml" value="UFID_Reader.csproj" />
+        <entry key="Views/Scan_View.axaml" value="UFID_Reader.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

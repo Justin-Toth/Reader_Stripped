@@ -1,10 +1,39 @@
+# Visual Studio Code
 .vscode/
+
+# Python
 __pycache__/
-/.env
-UFIDReader/Libraries/GUI/__pycache__/
-UFIDReader/Libraries/Validation/__pycache__/
-UFIDReader/src/__pycache__/
-UFIDReader/Logs/
-UFIDReader/Testdata/
-UFIDReader/src/lib/
-UFIDReader/venv
+UFIDReader_python/Libraries/GUI/__pycache__/
+UFIDReader_python/Libraries/Validation/__pycache__/
+UFIDReader_python/src/__pycache__/
+UFIDReader_python/Logs/
+UFIDReader_python/Testdata/
+UFIDReader_python/src/lib/
+UFIDReader_python/venv
+
+
+# Environment variables
+.env
+
+# Rider
+/.idea/
+/.idea.UFID_Reader.iml
+/contentModel.xml
+/modules.xml
+/projectSettingsUpdater.xml
+/shelf/
+/workspace.xml
+
+# Editor-based HTTP Client requests
+/httpRequests/
+
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+
+# UFID_Reader specific
+UFID_Reader/bin/
+UFID_Reader/obj/
+UFID_Reader/packages/
+UFID_Reader/riderModule.iml
+UFID_Reader/_ReSharper.Caches/

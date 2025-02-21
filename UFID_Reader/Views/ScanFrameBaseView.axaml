@@ -1,0 +1,18 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="clr-namespace:UFID_Reader.ViewModels"
+             x:DataType="vm:ScanFrameBaseViewModel"
+             x:Class="UFID_Reader.Views.ScanFrameBaseView">
+    
+    <Design.DataContext><vm:ScanFrameBaseViewModel></vm:ScanFrameBaseViewModel></Design.DataContext>
+    
+    <Grid RowDefinitions="*, Auto">
+        <StackPanel Spacing="12"> 
+            <TextBlock Text="Tap or Swipe UFID Card" TextAlignment="Center" TextWrapping="Wrap" Foreground="{DynamicResource PrimaryText2}" FontSize="80" FontWeight="Bold" ></TextBlock> 
+            <Image Source="{SvgImage /Assets/Images/down_arrow.svg}" Width="200" ></Image> 
+        </StackPanel> 
+   </Grid> 
+</UserControl>

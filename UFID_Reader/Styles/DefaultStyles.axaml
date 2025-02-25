@@ -1,22 +1,21 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Design.PreviewWith>
-        <Border Padding="20" Background="{DynamicResource ButtonBackground}">
-            <!-- Add Controls for Previewer Here -->
-            <Button Content="Hello World"></Button>
+        <Border Background="{DynamicResource ButtonBackground}" Padding="20">
+            <!--  Add Controls for Previewer Here  -->
+            <Button Content="Hello World" />
         </Border>
     </Design.PreviewWith>
 
-    <!-- Add Styles Here -->
+    <!--  Add Styles Here  -->
     <Style Selector="Button">
-        <Setter Property="FontSize" Value="20"></Setter>
-        <Setter Property="FontFamily" Value="Roboto"></Setter>
-        <Setter Property="Foreground" Value="{DynamicResource PrimaryText2}"></Setter>
-        <Setter Property="Background" Value="{DynamicResource PrimaryBackground2}"></Setter>
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontFamily" Value="Roboto" />
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryText2}" />
+        <Setter Property="Background" Value="{DynamicResource PrimaryBackground2}" />
     </Style>
-    
+
     <Style Selector="Button:pointerover /template/ ContentPresenter">
-        <Setter Property="Foreground" Value="{DynamicResource PrimaryHoverText1}"></Setter>
-        <Setter Property="Background" Value="{DynamicResource PrimaryHover1}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryHoverText1}" />
+        <Setter Property="Background" Value="{DynamicResource PrimaryHover1}" />
     </Style>
-</Styles> 
+</Styles>

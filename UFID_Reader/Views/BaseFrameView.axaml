@@ -14,17 +14,6 @@
         <StackPanel Spacing="12"> 
             <TextBlock Text="Tap or Swipe UFID Card" TextAlignment="Center" TextWrapping="Wrap" Foreground="{DynamicResource PrimaryText2}" FontSize="80" FontWeight="Bold" ></TextBlock> 
             <Image Source="{SvgImage /Assets/Images/down_arrow.svg}" Width="200" ></Image>
-        </StackPanel> 
-        <StackPanel Grid.Row="1" Spacing="12" Margin="0,0,0,20">
-            <TextBox Height="40" HorizontalAlignment="Center"
-                     Watermark="Input" AcceptsReturn="False"
-                     FontSize="20" MaxLines="1"
-                     IsVisible="False"/>
-            
-            <Button Content="Auth" 
-                    Background="{DynamicResource PrimaryBackground1}"
-                    Foreground="{DynamicResource PrimaryText1}" 
-                    HorizontalAlignment="Center"/>
         </StackPanel>
     </Grid> 
 </UserControl>

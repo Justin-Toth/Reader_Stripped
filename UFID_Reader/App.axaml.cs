@@ -3,10 +3,12 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
+using System.Net.Http;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using UFID_Reader.Factory;
 using UFID_Reader.Models;
+using UFID_Reader.Services;
 using UFID_Reader.ViewModels;
 using UFID_Reader.Views;
 
@@ -26,6 +28,10 @@ public partial class App : Application
         collection.AddTransient<BaseFrameViewModel>();
         collection.AddTransient<SuccessFrameViewModel>();
         collection.AddTransient<FailureFrameViewModel>();
+        
+        collection.AddSingleton<HttpClient>();
+        collection.AddTransient<IValidationService, ValidationService>();
+        
 
         
         collection.AddSingleton<Func<FrameNames, FrameViewModel>>(x => name => name switch

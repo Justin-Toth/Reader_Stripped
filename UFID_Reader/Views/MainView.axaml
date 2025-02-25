@@ -1,39 +1,41 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:UFID_Reader.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="600"
-        x:Class="UFID_Reader.MainView"
-        xmlns:vm="clr-namespace:UFID_Reader.ViewModels"
-        xmlns:view="clr-namespace:UFID_Reader.Views"
+        xmlns:svg="clr-namespace:Svg;assembly=Svg.Custom"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="UFID_Reader.Views.MainView"
         x:DataType="vm:MainViewModel"
-        Title="UFID_Reader"
+        Title="UFID_Reader_Remake"
+        Icon="/Assets/avalonia-logo.ico"
         
         Width="1024" Height="600"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="0"
         SystemDecorations="None"
-        Background="Transparent"
         WindowStartupLocation="CenterScreen">
-        
-        <!-- SystemDecorations="None" testing  <-add/remove above to remove/add window decorators -->
-        
-        <Design.DataContext><vm:MainViewModel></vm:MainViewModel></Design.DataContext>
-        
-        <Grid ColumnDefinitions="1*,2*">
-                <Border Background="{DynamicResource PrimaryBackground1}" Padding="50">
-                        <Grid RowDefinitions="*, Auto">
-                                <Image Grid.Row="0" Source="{SvgImage /Assets/Images/gators_logo.svg}" VerticalAlignment="Top"></Image>
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainViewModel/>
+    </Design.DataContext>
+
+    <Grid ColumnDefinitions="1*,2*">
+        <Border Background="{DynamicResource PrimaryBackground1}" Padding="50">
+            <Grid RowDefinitions="*, Auto">
+                <Image Grid.Row="0" Source="{SvgImage /Assets/Images/gators_logo.svg}" VerticalAlignment="Top"></Image>
                                 
-                                <StackPanel Grid.Row="1" Spacing="12" >
-                                        <Button Content="Change Content" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Command="{Binding ToggleFrameCommand}"></Button>
-                                        <Button Content="Close" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Click="OnCloseButtonClick" Margin="0,0,0,20"></Button>
-                                        <TextBlock Text="{Binding CurrentDate}" TextAlignment="Center" FontSize="20" FontStretch="Expanded"></TextBlock>
-                                        <TextBlock Text="{Binding CurrentTime}" TextAlignment="Center" FontSize="20" FontStretch="Expanded"></TextBlock>
-                                </StackPanel>
-                        </Grid>
-                </Border>
+                <StackPanel Grid.Row="1" Spacing="12" >
+                    <Button Content="Change Content" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Command="{Binding ToggleFrameCommand}"></Button>
+                    <Button Content="Close" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Click="OnCloseButtonClick" Margin="0,0,0,20"></Button>
+                    <TextBlock Text="{Binding CurrentDate}" TextAlignment="Center" FontSize="20" FontStretch="Expanded"></TextBlock>
+                    <TextBlock Text="{Binding CurrentTime}" TextAlignment="Center" FontSize="20" FontStretch="Expanded"></TextBlock>
+                </StackPanel>
+            </Grid>
+        </Border>
                 
-                <ContentControl Grid.Column="1" Content="{Binding CurrentFrame}" Background="{DynamicResource PrimaryBackground2}" Padding="25"></ContentControl>
-        </Grid>
+        <ContentControl Grid.Column="1" Content="{Binding CurrentFrame}" Background="{DynamicResource PrimaryBackground2}" Padding="25"></ContentControl>
+    </Grid>
 </Window>

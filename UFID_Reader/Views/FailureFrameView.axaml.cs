@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace UFID_Reader.Views;
 
-public partial class ScanFrameBaseView : UserControl
+public partial class FailureFrameView : UserControl
 {
-    public ScanFrameBaseView()
+    public FailureFrameView()
     {
         InitializeComponent();
     }

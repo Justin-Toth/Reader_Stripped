@@ -2,19 +2,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:UFID_Reader.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="clr-namespace:UFID_Reader.ViewModels"
-             x:DataType="vm:ScanFrameFailureViewModel"
-             x:Class="UFID_Reader.Views.ScanFrameFailureView">
+             x:Class="UFID_Reader.Views.SuccessFrameView">
     
-    <Design.DataContext><vm:ScanFrameBaseViewModel></vm:ScanFrameBaseViewModel></Design.DataContext>
-    
+    <Design.DataContext><viewModels:SuccessFrameViewModel></viewModels:SuccessFrameViewModel></Design.DataContext>
+
+   
     <Grid RowDefinitions="*, Auto">
         <StackPanel Spacing="12"> 
             <TextBlock TextAlignment="Center" TextWrapping="Wrap" Foreground="{DynamicResource PrimaryText2}" FontSize="80" FontWeight="Bold"  >
-                Unable to <LineBreak /> Verify ID
+                Successfully <LineBreak /> Verified ID
             </TextBlock> 
-            <Image Source="{SvgImage /Assets/Images/failure_icon.svg}" Width="200" Margin="0,50,0,0"></Image> 
+            <Image Source="{SvgImage /Assets/Images/success_icon.svg}" Width="200" Margin="0,50,0,0"></Image> 
         </StackPanel> 
     </Grid> 
 </UserControl>

@@ -9,39 +9,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.2.1" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.2.1" />
+        <AvaloniaResource Include="Assets\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.2.1"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.2.1"/>
         <PackageReference Include="Avalonia.Svg.Skia" Version="11.2.0.2" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.1" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.1" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.1"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.1"/>
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Include="Avalonia.Diagnostics" Version="11.2.1">
             <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-        <PackageReference Include="ReactiveUI" Version="20.1.63" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Assets\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Assets\Images\gators_logo.svg" />
-      <AvaloniaResource Include="Assets\Images\gators_logo.svg" />
-      <None Remove="Assets\Images\down_arrow.svg" />
-      <AvaloniaResource Include="Assets\Images\down_arrow.svg" />
-      <None Remove="Assets\Images\failure_icon.svg" />
-      <AvaloniaResource Include="Assets\Images\failure_icon.svg" />
-      <None Remove="Assets\Images\success_icon.svg" />
-      <AvaloniaResource Include="Assets\Images\success_icon.svg" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Views\MainView.axaml.cs">
-        <DependentUpon>MainView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
+        <PackageReference Include="System.Reactive" Version="6.0.1" />
     </ItemGroup>
 </Project>

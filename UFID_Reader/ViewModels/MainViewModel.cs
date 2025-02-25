@@ -2,58 +2,62 @@
 using System.Reactive.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using UFID_Reader.Factory;
+using UFID_Reader.Models;
 
 namespace UFID_Reader.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
+    private readonly FrameFactory _frameFactory;
+    
     [ObservableProperty]
-    private ViewModelBase _currentFrame;
-
+    private FrameViewModel _currentFrame = null!;
+    
     [ObservableProperty] 
     private string _currentTime;
     
     [ObservableProperty]
     private string _currentDate;
 
-    private readonly ScanFrameBaseViewModel _scanFrameBase = new ();
-    private readonly ScanFrameFailureViewModel _scanFrameFailure = new ();
-    private readonly ScanFrameSuccessViewModel _scanFrameSuccess = new ();
-
-    public MainViewModel()
+    public MainViewModel(FrameFactory frameFactory)
     {
-        CurrentFrame = _scanFrameBase;
-
+        _frameFactory = frameFactory;
+        
+        GoToBase();
+        
         CurrentTime = DateTime.Now.ToString("hh:mm:ss tt");
         CurrentDate = DateTime.Now.ToString("MMMM dd, yyyy");
         
         Observable.Interval(TimeSpan.FromSeconds(1))
             .Subscribe(_ => CurrentTime = DateTime.Now.ToString("hh:mm:ss tt"));
     }
+    
+    [RelayCommand]
+    private void GoToBase() => CurrentFrame = _frameFactory.GetFrameViewModel(FrameNames.Base);
 
+    [RelayCommand]
+    private void GoToFailure() => CurrentFrame = _frameFactory.GetFrameViewModel(FrameNames.Failure);
+    
+    [RelayCommand]
+    private void GoToSuccess() => CurrentFrame = _frameFactory.GetFrameViewModel(FrameNames.Success);
+    
+    
+    // Temp Function to swap between frames
     [RelayCommand]
     private void ToggleFrame()
     {
-        if (CurrentFrame == _scanFrameBase)
+       switch (CurrentFrame.FrameName)
         {
-            GoToFailure();
-        }
-        else if (CurrentFrame == _scanFrameFailure)
-        {
-            GoToSuccess();
-        }
-        else
-        {
-            GoToBase();
-        }
+            case FrameNames.Base:
+                GoToFailure();
+                break;
+            case FrameNames.Failure:
+                GoToSuccess();
+                break;
+            default:
+                GoToBase();
+                break;
+        }    
     }
-    
-    [RelayCommand]
-    private void GoToBase() => CurrentFrame = _scanFrameBase;    
-    
-    [RelayCommand] 
-    private void GoToFailure() => CurrentFrame = _scanFrameFailure;    
-    
-    [RelayCommand]
-    private void GoToSuccess() => CurrentFrame = _scanFrameSuccess;    
 }

@@ -16,7 +16,7 @@ from datetime import datetime, timedelta
 
 ENABLE_LOGGING = True
 BASE_URL = "https://gatorufid.pythonanywhere.com/"
-CHECKIN_SITE_URL = "https://brirod2240.pythonanywhere.com/api/add_timesheet"
+# CHECKIN_SITE_URL = "https://brirod2240.pythonanywhere.com/api/add_timesheet"
 
 # Setup Logging
 LOG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Logs")
@@ -200,8 +200,8 @@ def validate(mode, serial_num, card_iso=None, card_ufid=None):
                 log_messages.append(f"Timesheet POST response: {response.status_code}, {response.text}")
 
                 # Get the check-in site response
-                checkin_site_response = requests.post(CHECKIN_SITE_URL, json=params)
-                log_messages.append(f"Check-in site POST response: {checkin_site_response.status_code}, {checkin_site_response.text}")
+                # checkin_site_response = requests.post(CHECKIN_SITE_URL, json=params)
+                # log_messages.append(f"Check-in site POST response: {checkin_site_response.status_code}, {checkin_site_response.text}")
 
                 is_valid = 0
                 match_found = True

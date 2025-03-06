@@ -13,7 +13,7 @@ class UserBase(BaseModel):
     email: EmailStr
     full_name: str
     password: str
-    is_admin = False
+    is_admin: bool = False
 
 class UserUpdate(BaseModel):
     username: Optional[str] = None

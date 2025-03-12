@@ -3,7 +3,6 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
-using System.Net.Http;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using UFID_Reader.Factory;
@@ -29,10 +28,16 @@ public partial class App : Application
         collection.AddTransient<SuccessFrameViewModel>();
         collection.AddTransient<FailureFrameViewModel>();
         
-        collection.AddSingleton<HttpClient>();
-        collection.AddTransient<IValidationService, ValidationService>();
-        
+        // Configure Services needed for Authentication
+        const string connectionString = "Server=127.0.0.1;Port=3306;Database=ufid_database;User=myuser;Password=mypass;";
+        collection.AddSingleton<IDbService, DbService>(x => new DbService(connectionString));
+        collection.AddTransient<IAuthService, AuthService>();
+        collection.AddTransient<IStudentService, StudentService>();
+        collection.AddTransient<IKioskService, KioskService>();
+        collection.AddTransient<IScheduleService, ScheduleService>();
+        collection.AddTransient<IDateTimeService, DateTimeService>();
 
+        
         
         collection.AddSingleton<Func<FrameNames, FrameViewModel>>(x => name => name switch
         {

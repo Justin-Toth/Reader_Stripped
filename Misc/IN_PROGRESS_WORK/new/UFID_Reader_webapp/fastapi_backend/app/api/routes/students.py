@@ -3,7 +3,6 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 
 # Relative Imports (want to fix this eventually)
-from ...utils.security import get_password_hash
 from ...utils.database import db_dependency
 from ...models import Student
 

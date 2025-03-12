@@ -12,7 +12,7 @@ namespace UFID_Reader.ViewModels;
 public partial class MainViewModel : ViewModelBase
 {
     private readonly FrameFactory _frameFactory;
-    private readonly IValidationService _validationService;
+    private readonly IAuthService _authService;
     
     [ObservableProperty]
     private FrameViewModel _currentFrame = null!;
@@ -26,11 +26,14 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private string _scannerInput = "";
 
+    [ObservableProperty] 
+    private string _mode = "class";
+
     // Default Constructor
-    public MainViewModel(FrameFactory frameFactory, IValidationService validationService)
+    public MainViewModel(FrameFactory frameFactory, IAuthService authService)
     {
         _frameFactory = frameFactory;
-        _validationService = validationService;
+        _authService = authService;
         
         GoToBase();
         
@@ -62,28 +65,26 @@ public partial class MainViewModel : ViewModelBase
     private void GoToSuccess() => CurrentFrame = _frameFactory.GetFrameViewModel(FrameNames.Success);
     
     [RelayCommand]
-    private async Task Validate()
+    private void ChangeMode() => Mode = Mode == "class" ? "exam" : "class";
+    
+    [RelayCommand]
+    private async Task Authenticate()
     {
-        const int mode = 1;
-        const string serialNum = "10000000d340eb60";
+        // Todo:
+        // Add 15 min grace period to start_times (swiping before class/exam starts)
+        // Grab serial number from kiosk (raspberry pi)
+        // Figure something out for mode selection physically
         
-        // Run the validation service
-        // {Mode = 1 (exam mode), SerialNum = 10000000d340eb60 (valid kiosk in db), ScannerInput = the input from the scanner}
-        var result = await _validationService.Validate(mode, serialNum, ScannerInput);
-
-        // Clear the scanner input for a new scan
+        var result = await _authService.AuthenticateSwipeAsync(ScannerInput, Mode, "10000000d340eb60");
         ScannerInput = "";
         
-        // Debug: print the result to console
-        Console.WriteLine(result.IsValid ? "Success" : "Failure");
-
-        // Set the current frame to the appropriate frame based on the result
-        CurrentFrame = result.IsValid
-            ? _frameFactory.GetFrameViewModel(FrameNames.Success) 
+        Console.WriteLine(result.Message);
+        
+        CurrentFrame = result.IsSuccess
+            ? _frameFactory.GetFrameViewModel(FrameNames.Success)
             : _frameFactory.GetFrameViewModel(FrameNames.Failure);
         
-        // Delay for 1 second before returning to the base frame to allow result to display
-        await Task.Delay(TimeSpan.FromSeconds(1));
+        await Task.Delay(TimeSpan.FromSeconds(3));
         CurrentFrame = _frameFactory.GetFrameViewModel(FrameNames.Base);
     }
 }

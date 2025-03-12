@@ -10,7 +10,7 @@
         Title="UFID_Reader_Remake"
         Icon="/Assets/avalonia-logo.ico"
         
-        Width="1024" Height="600"
+        Width="960" Height="540"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="0"
         SystemDecorations="None"
@@ -35,15 +35,18 @@
                              Opacity="0"
                              Text="{Binding ScannerInput}">
                         <TextBox.KeyBindings>
-                            <KeyBinding Command="{Binding ValidateCommand}" Gesture="Enter"></KeyBinding>
+                            <KeyBinding Command="{Binding AuthenticateCommand}" Gesture="Enter"></KeyBinding>
                         </TextBox.KeyBindings>  
                         <Interaction.Behaviors>
                             <FocusOnAttachedToVisualTreeBehavior />
                         </Interaction.Behaviors>
                     </TextBox>
-                    
+                    <Button Content="Change Mode" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Command="{Binding ChangeModeCommand}"></Button>
                     <Button Content="Close" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Click="OnCloseButtonClick" Margin="0,0,0,20"></Button>
-                    <TextBlock Text="{Binding CurrentDate}" TextAlignment="Center" FontSize="20" FontStretch="Expanded" Foreground="{DynamicResource PrimaryBackground2}"></TextBlock>
+                    <TextBlock Text="{Binding CurrentDate}" 
+                               TextAlignment="Center" 
+                               FontSize="20" FontStretch="Expanded" 
+                               Foreground="{DynamicResource PrimaryBackground2}"></TextBlock>
                     <TextBlock Text="{Binding CurrentTime}" TextAlignment="Center" FontSize="20" FontStretch="Expanded" Foreground="{DynamicResource PrimaryBackground2}"></TextBlock>
                 </StackPanel>
             </Grid>

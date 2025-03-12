@@ -1,15 +1,6 @@
 from sqlalchemy import Column, Integer, Boolean, String
 from .utils.database import Base
 
-""" Later
-class Course(Base):
-    __tablename__ = "courses"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    description = Column(String, index=True)
-"""
-
 class User(Base):
     __tablename__ = "users"
 
@@ -36,3 +27,38 @@ class Student(Base):
     course3 = Column(String(8))
     course4 = Column(String(8))
     course5 = Column(String(8))
+
+
+class Kiosk(Base):
+    __tablename__ = "kiosks"
+
+    serial_num = Column(String(16), unique=True, primary_key=True, index=True)
+    room_num = Column(String(8))
+
+
+class Exam(Base):
+    __tablename__ = "exams"
+
+    course_code = Column(String(8), primary_key=True, index=True)
+    course_name = Column(String(255))
+    instructors = Column(String(255))
+    sections = Column(String(255))
+    room = Column(String(8))
+    date = Column(String(16))
+    start_time = Column(String(16))
+    end_time = Column(String(16))
+
+
+class Course(Base):
+    __tablename__ = "courses"
+
+    course_code = Column(String(8), index=True)
+    course_name = Column(String(255))
+    class_num = Column(String(5), primary_key=True, index=True)
+    instructors = Column(String(255))
+    meet_no = Column(String(1), primary_key=True, index=True)
+    meet_days = Column(String(16))
+    meet_time_begin = Column(String(16))
+    meet_time_end = Column(String(16))
+    meet_room = Column(String(8))
+    

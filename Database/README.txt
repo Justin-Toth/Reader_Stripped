@@ -40,3 +40,30 @@ WIP
     1. Refactor backend to interact with the mariaDB database hosted on docker
     2. Set up docker/database on a server that can be remotely accessed safely anywhere instead of utilizing LAN connections
 
+
+EXPORTING/IMPORTING
+  - As the database is currently locally hosted, our changes do not carry over
+  - To resolve this for now, we will pass around a dump of the database.
+
+  - To dump the db from the container
+    - Make sure you have the latest version of mariaDB installed on your machine: 
+        - Release list: https://mariadb.org/mariadb/all-releases/
+        - Currently 11.7.2
+
+    - run the following command
+        - docker exec ufid_mariadb mariadb-dump -umyuser -pmypass ufid_database > ufid_database_backup.sql
+
+    - should produce the file within this directory
+        - commit the file to github for now
+
+    
+
+  - To import the db to the container
+    - run the following command
+        - docker exec -i <containerID> mariadb -umyuser -pmypass ufid_database < ufid_database_backup.sql
+
+        - Note: Replace containerID with the id or name of the running container
+
+
+
+  - The database should now be populated with the most recent data

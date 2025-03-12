@@ -49,6 +49,7 @@ EXPORTING/IMPORTING
     - Make sure you have the latest version of mariaDB installed on your machine: 
         - Release list: https://mariadb.org/mariadb/all-releases/
         - Currently 11.7.2
+        - Change default port away from 3306
 
     - run the following command
         - docker exec ufid_mariadb mariadb-dump -umyuser -pmypass ufid_database > ufid_database_backup.sql

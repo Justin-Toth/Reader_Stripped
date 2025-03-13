@@ -7,6 +7,7 @@ from ...utils.database import db_dependency
 from ...models import Exam
 
 # Pydantic Model for Exam Creation
+# May need to change as db should have all data inited and we just need to update time to "create" an exam
 class ExamBase(BaseModel):
     course_code: str
     course_name: str
@@ -18,10 +19,7 @@ class ExamBase(BaseModel):
     end_time: str
 
 class ExamUpdate(BaseModel):
-    course_code: Optional[str] = None
-    course_name: Optional[str] = None
-    instructors: Optional[str] = None
-    sections: Optional[str] = None
+    # Only fields that can be updated
     room: Optional[str] = None
     date: Optional[str] = None
     start_time: Optional[str] = None

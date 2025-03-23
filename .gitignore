@@ -3,14 +3,13 @@
 
 # Python
 __pycache__/
-UFIDReader_python/Libraries/GUI/__pycache__/
-UFIDReader_python/Libraries/Validation/__pycache__/
-UFIDReader_python/src/__pycache__/
-UFIDReader_python/Logs/
-UFIDReader_python/Testdata/
-UFIDReader_python/src/lib/
-UFIDReader_python/venv
-
+Misc/Old_Work/UFIDReader_python/Libraries/GUI/__pycache__/
+Misc/Old_Work/UFIDReader_python/Libraries/Validation/__pycache__/
+Misc/Old_Work/UFIDReader_python/src/__pycache__/
+Misc/Old_Work/UFIDReader_python/Logs/
+Misc/Old_Work/UFIDReader_python/Testdata/
+Misc/Old_Work/UFIDReader_python/src/lib/
+Misc/Old_Work/UFIDReader_python/venv
 
 # Environment variables
 .env
@@ -31,9 +30,40 @@ UFIDReader_python/venv
 /dataSources/
 /dataSources.local.xml
 
+
+
+
+
+# Current Project ignores (I think ~ Justin)
 # UFID_Reader specific
 UFID_Reader/bin/
 UFID_Reader/obj/
 UFID_Reader/packages/
 UFID_Reader/riderModule.iml
 UFID_Reader/_ReSharper.Caches/
+
+
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+# Local env files
+.env
+.env.*
+!.env.example

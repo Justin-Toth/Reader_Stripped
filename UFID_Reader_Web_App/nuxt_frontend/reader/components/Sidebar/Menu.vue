@@ -8,21 +8,22 @@
     ])
 </script>
 
+<!-- Create dynamic column and include respective item icon and name for easy navigation -->
 <template>
-    <div v-for="item in items" :key="item.name">
+    <div v-for="item in items" :key="item.name" class="flex flex-col items-center">
         <TooltipProvider>
             <Tooltip>
-                <!--Image-->
                 <TooltipTrigger as-child>
                     <NuxtLink
                         :to="item.path"
-                        class="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8">
-                        <Icon :name="item.icon" class="h-5 w-5" />
-                        <span class="sr-only">{{ item.name }}</span>
+                        class="flex flex-col items-center space-y-1 p-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                        <!-- Icon -->
+                        <Icon :name="item.icon" class="h-6 w-6" />
+                        <!-- Name -->
+                        <span class="text-xs font-medium">{{ item.name }}</span>
                     </NuxtLink>
                 </TooltipTrigger>
-
-                <!--Tooltip-->
                 <TooltipContent side="right">
                     {{ item.name }}
                 </TooltipContent>

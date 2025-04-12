@@ -22,8 +22,6 @@
             <!--Menu Items-->
             <SheetContent side="left" class="sm:max-w-xs">
                 <nav class="grid gap-6 text-lg font-medium">
-                    <!--Company Logo-->
-                    <CompanyLogo />
 
                     <!--Menu Items-->
                     <div v-for="item in items" :key="item.name">

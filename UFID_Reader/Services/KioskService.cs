@@ -13,8 +13,8 @@ public class KioskService(IDbService dbService) : IKioskService
 {
     public async Task RegisterKioskAsync(string serialNumber)
     {
-        const string insert = "INSERT INTO kiosks (serial_number, registered_at) VALUES (@SerialNumber, NOW())";
-        await dbService.ExecuteAsync(insert, new { SerialNumber = serialNumber });
+        const string sql = "INSERT INTO kiosks (serial_num, room_num) VALUES (@SerialNumber, 'No Room')";
+        await dbService.ExecuteAsync(sql, new { SerialNumber = serialNumber });
     }
     public async Task<Kiosk?> GetKioskBySerialNumberAsync(string serialNumber)
     {

@@ -21,3 +21,17 @@ onMounted(async () => {
     <DataTable :columns="columns" :data="data" />
   </div>
 </template>
+
+<!--
+
+Hello! This is a testing page that was used while following the ShadCn datatable tutorial.
+
+It is not used in the final version of the UFID Reader Web App.
+This Folder can be deleted whenever, but it is kept here for reference.
+
+This also shows how to use folders for pages in Nuxt 3.
+- Index.vue is the default page for this folder.
+- You can create subfolders for more pages, and they will be accessible via the URL.
+- For example, if you create a folder called "subfolder" and add an index.vue file in it, it will be accessible via /testing/subfolder.
+
+-->

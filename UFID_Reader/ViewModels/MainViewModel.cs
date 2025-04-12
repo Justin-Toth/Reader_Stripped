@@ -13,6 +13,8 @@ public partial class MainViewModel : ViewModelBase
 {
     private readonly FrameFactory _frameFactory;
     private readonly IAuthService _authService;
+    private readonly IRpiService _rpiService;
+    private readonly IKioskService _kioskService;
     
     [ObservableProperty]
     private FrameViewModel _currentFrame = null!;
@@ -30,10 +32,15 @@ public partial class MainViewModel : ViewModelBase
     private string _mode = "class";
 
     // Default Constructor
-    public MainViewModel(FrameFactory frameFactory, IAuthService authService)
+    public MainViewModel(FrameFactory frameFactory, IAuthService authService, IRpiService rpiService, IKioskService kioskService)
     {
         _frameFactory = frameFactory;
         _authService = authService;
+        _rpiService = rpiService;
+        _kioskService = kioskService;
+        
+        // Initialize the kiosk
+        InitializeKioskAsync().ConfigureAwait(false);
         
         GoToBase();
         
@@ -44,7 +51,8 @@ public partial class MainViewModel : ViewModelBase
             .Subscribe(_ => CurrentTime = DateTime.Now.ToString("hh:mm:ss tt"));
     }
 
-    // Design Time Constructor
+    // Design Time Constructor (Can be deleted/removed if needed, allows us to see a design time view of the frame)
+    // This is what is throwing the two warnings for this file
     public MainViewModel()
     {
         CurrentTime = DateTime.Now.ToString("hh:mm:ss tt");
@@ -52,6 +60,22 @@ public partial class MainViewModel : ViewModelBase
         
         Observable.Interval(TimeSpan.FromSeconds(1))
             .Subscribe(_ => CurrentTime = DateTime.Now.ToString("hh:mm:ss tt"));
+    }
+    
+    private async Task InitializeKioskAsync()
+    {
+        var serialNumber = _rpiService.GetRpiSerial();
+        var isRegistered = await _kioskService.IsKioskRegisteredAsync(serialNumber);
+
+        if (!isRegistered)
+        {
+            await _kioskService.RegisterKioskAsync(serialNumber);
+            Console.WriteLine("Kiosk registered successfully.");
+        }
+        else
+        {
+            Console.WriteLine("Kiosk is already registered.");
+        }
     }
     
     
@@ -74,8 +98,12 @@ public partial class MainViewModel : ViewModelBase
         // Add 15 min grace period to start_times (swiping before class/exam starts)
         // Grab serial number from kiosk (raspberry pi)
         // Figure something out for mode selection physically
-        
-        var result = await _authService.AuthenticateSwipeAsync(ScannerInput, Mode, "10000000d340eb60");
+        // Add timesheet to log swipes
+        // Testing serial number if you want "10000000d340eb60"
+
+        var serialNumber = _rpiService.GetRpiSerial();
+        Console.WriteLine($"Serial number: {serialNumber}");
+        var result = await _authService.AuthenticateSwipeAsync(ScannerInput, Mode, serialNumber);
         ScannerInput = "";
         
         Console.WriteLine(result.Message);

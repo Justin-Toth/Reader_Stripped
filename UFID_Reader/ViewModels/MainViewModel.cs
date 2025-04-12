@@ -41,7 +41,6 @@ public partial class MainViewModel : ViewModelBase
         
         // Initialize the kiosk
         InitializeKioskAsync().ConfigureAwait(false);
-        Console.WriteLine("Constructor called");
         
         GoToBase();
         
@@ -66,17 +65,17 @@ public partial class MainViewModel : ViewModelBase
     private async Task InitializeKioskAsync()
     {
         var serialNumber = _rpiService.GetRpiSerial();
-        Console.WriteLine($"Serial number: {serialNumber}");
         var kiosk = await _kioskService.GetKioskBySerialNumberAsync(serialNumber);
         
         if (kiosk == null)
         {
+            Console.WriteLine("Kiosk not found, registering...");
             await _kioskService.RegisterKioskAsync(serialNumber);
             Console.WriteLine("Kiosk registered successfully.");
         }
         else
         {
-            Console.WriteLine("Kiosk is already registered.");
+            Console.WriteLine($"Kiosk: {kiosk.serial_num} is already registered.");
         }
     }
     
@@ -104,7 +103,6 @@ public partial class MainViewModel : ViewModelBase
         // Testing serial number if you want "10000000d340eb60"
 
         var serialNumber = _rpiService.GetRpiSerial();
-        Console.WriteLine($"Serial number: {serialNumber}");
         var result = await _authService.AuthenticateSwipeAsync(ScannerInput, Mode, serialNumber);
         ScannerInput = "";
         

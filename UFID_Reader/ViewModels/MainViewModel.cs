@@ -41,6 +41,7 @@ public partial class MainViewModel : ViewModelBase
         
         // Initialize the kiosk
         InitializeKioskAsync().ConfigureAwait(false);
+        Console.WriteLine("Constructor called");
         
         GoToBase();
         
@@ -65,9 +66,10 @@ public partial class MainViewModel : ViewModelBase
     private async Task InitializeKioskAsync()
     {
         var serialNumber = _rpiService.GetRpiSerial();
-        var isRegistered = await _kioskService.IsKioskRegisteredAsync(serialNumber);
-
-        if (!isRegistered)
+        Console.WriteLine($"Serial number: {serialNumber}");
+        var kiosk = await _kioskService.GetKioskBySerialNumberAsync(serialNumber);
+        
+        if (kiosk == null)
         {
             await _kioskService.RegisterKioskAsync(serialNumber);
             Console.WriteLine("Kiosk registered successfully.");

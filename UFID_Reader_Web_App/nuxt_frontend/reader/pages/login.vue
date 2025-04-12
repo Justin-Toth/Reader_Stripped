@@ -1,125 +1,101 @@
-<template>
-    <div class="login-page">
-        <div class="login-container">
-            <div class="login-header">
-                <img src="~/assets/UF_Monogram.png" alt="Logo" class="login-logo" />
-                <h1>Login with Gatorlink</h1>
-            </div>
-            <form @submit.prevent="handleLogin">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input
-                        type="email"
-                        id="email"
-                        v-model="email"
-                        placeholder="Enter your email"
-                        required
-                    />
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        v-model="password"
-                        placeholder="Enter your password"
-                        required
-                    />
-                </div>
-                <button type="submit" class="login-button">Login</button>
-            </form>
-        </div>
-    </div>
-</template>
+<script setup lang="ts">
+import { EyeIcon } from 'lucide-vue-next'
+import { toTypedSchema } from '@vee-validate/zod'
+import { z } from 'zod'
 
-<script>
-export default {
-    data() {
-        return {
-            email: '',
-            password: '',
-        };
-    },
-    methods: {
-        handleLogin() {
-            // Add your login logic here
-            if (this.email && this.password) {
-                console.log('Logging in with:', this.email, this.password);
-                // Example: Call an API or perform validation
-            } else {
-                alert('Please fill in all fields.');
-            }
-        },
-    },
-};
+definePageMeta({
+  layout: 'no-auth'
+})
+
+const router = useRouter()
+
+// Validation schema
+const loginSchema =    toTypedSchema(z.object({
+  email: z.string().email(),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+}))
+
+const showPassword = ref(false)
+
+// This will need to be replaced with the actual login function
+// This is just a placeholder for demonstration purposes
+function handleLogin(values: { email: string; password: string }) {
+  console.log('Email:', values.email)
+  console.log('Password:', values.password)
+
+  // Simulate a successful login
+  router.push('/')
+}
 </script>
 
-<style scoped>
-.login-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f5f5f5;
-}
 
-.login-container {
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-}
-
-.login-header {
-    text-align: center;
-    margin-bottom: 2.5rem;
-}
-
-.login-logo {
-    display: block;
-    margin: 0 auto 1rem;
-    max-width: 80px; /* Adjust the maximum width */
-    height: auto; /* Maintain aspect ratio */
-}
-
-h1 {
-    margin-bottom: 0;
-    font-size: 1.5rem; /* Adjust the size as needed */
-    font-weight: bold; /* Optional: Make the text bold */
-    text-align: center; /* Optional: Center the text */
-}
-
-.form-group {
-    margin-bottom: 1rem;
-}
-
-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-}
-
-input {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.login-button {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-.login-button:hover {
-    background-color: #0056b3;
-}
-</style>
+<template>
+    <div class="flex items-center justify-center min-h-screen px-4 relative">
+      <!-- Mode Toggle -->
+      <div class="absolute top-4 right-4">
+        <HeaderModeToggle />
+      </div>
+  
+      <!-- Card Container -->
+      <div class="flex w-full max-w-5xl bg-white dark:bg-gray-800 shadow-xl rounded-2xl overflow-hidden min-h-[600px]">
+        <!-- Left: Form -->
+        <div class="w-1/2 p-10 flex flex-col">
+          <div class="mb-4">
+            <img src="@/assets/UF_Monogram.png" alt="Logo" class="w-16 h-11" >
+          </div>
+  
+          <div class="flex flex-col justify-center flex-1">
+            <div class="w-full max-w-md">
+              <h1 class="text-3xl font-bold mb-6">Login to Your Account</h1>
+              <div class="h-px bg-gray-300 dark:bg-gray-600 mb-6" />
+  
+              <!-- ShadCN Form -->
+              <Form :validation-schema="loginSchema" class="space-y-4" @submit="handleLogin">
+                <!-- Email -->
+                <FormField v-slot="{ componentField }" name="email">
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input v-bind="componentField" type="email" placeholder="Email" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                </FormField>
+  
+                <!-- Password -->
+                <FormField v-slot="{ componentField }" name="password">
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <div class="relative">
+                        <Input
+                          v-bind="componentField"
+                          :type="showPassword ? 'text' : 'password'"
+                          placeholder="Password"
+                        />
+                        <button type="button" class="absolute right-3 top-2.5" @click="showPassword = !showPassword">
+                          <EyeIcon class="w-5 h-5" />
+                        </button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                </FormField>
+  
+                <Button type="submit" class="w-full">
+                    Sign In
+                </Button>
+              </Form>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Right Panel -->
+        <div class="w-1/2 bg-gradient-to-br from-[#FA4616] to-[#0021A5] text-white p-10 flex flex-col justify-center items-center">
+          <h2 class="text-3xl font-bold mb-4">Don't Have an Account Yet?</h2>
+          <p class="mb-6 text-center max-w-xs">Sign up to gain access to all your courses!</p>
+          <Button class="bg-white text-black hover:bg-gray-100">Sign Up</Button>
+        </div>
+      </div>
+    </div>
+  </template>

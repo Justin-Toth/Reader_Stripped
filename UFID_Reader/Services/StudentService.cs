@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UFID_Reader.Models;
+using UFID_Reader.Models.DbModels;
 
 namespace UFID_Reader.Services;
 

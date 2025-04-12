@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using System.Linq;
@@ -25,7 +26,7 @@ public class DbService(string connectionString) : IDbService
     private IDbConnection CreateConnection()
     {
         var connection = new MySqlConnection(connectionString);
-
+        
         return connection;
     }
 

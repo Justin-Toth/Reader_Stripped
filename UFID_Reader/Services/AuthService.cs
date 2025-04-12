@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UFID_Reader.Models;
+using UFID_Reader.Models.DbModels;
 
 namespace UFID_Reader.Services;
 
@@ -168,3 +169,130 @@ public class AuthService(
         Console.WriteLine();
     }
 }
+
+/*
+    var result = false;
+
+        if (mode == "class")
+        {
+            
+        
+        }
+        else if (mode == "exam")
+        {
+            var exams = await GetExamsByRoomNumberAsync(roomNumber);
+            if (exams == null)
+            {
+                Console.WriteLine("Exams not found");
+                return false;
+            }
+
+            Console.WriteLine($"Exams: {string.Join(", ", exams.Select(exam => exam.course_code))}");
+
+            foreach (var exam in exams)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"Exam For Class: {exam.course_code}");
+
+                foreach (var section in exam.sections.Split(','))
+                {
+                    Console.WriteLine($"Section: {section}");
+
+                    if (!sectionNumbers.Contains(section)) continue;
+                    var examDate = DateTime.Parse(exam.date);
+                    var examStart = DateTime.Parse(exam.start_time).TimeOfDay;
+                    var examEnd = DateTime.Parse(exam.end_time).TimeOfDay;
+
+                    result = examDate == DateTime.Today && currentTime >= examStart && currentTime <= examEnd;
+
+                    // Debug: print all the data to console
+                    Console.WriteLine();
+                    Console.WriteLine($"Student: {student.Full_Name}");
+                    Console.WriteLine($"UFID: {student.UFID}");
+                    Console.WriteLine($"Kiosk: {kiosk.serial_num}");
+                    Console.WriteLine($"Kiosk Room Number: {roomNumber}");
+                    Console.WriteLine($"Section Numbers: {string.Join(", ", sectionNumbers)}");
+                    Console.WriteLine();
+
+                    Console.WriteLine($"Exam For Class: {exam.course_code}");
+                    Console.WriteLine($"Exam Date: {exam.date}");
+                    Console.WriteLine($"Exam Start: {exam.start_time}");
+                    Console.WriteLine($"Exam End: {exam.end_time}");
+                    Console.WriteLine($"Exam Room Number: {exam.room}");
+                    Console.WriteLine();
+
+                    Console.WriteLine($"Current Day: {currentDay}");
+                    Console.WriteLine($"Current Time: {currentTime}");
+                    Console.WriteLine($"Result: {result}");
+                }
+            }
+
+        }
+        else
+        {
+            Console.WriteLine("Invalid mode");
+            return false;
+        }
+
+        return result;
+    }
+}
+
+/*
+    Mode 0 for now
+
+        get student by ID
+            extract {section numbers} from student
+
+        get courses by section numbers
+            extract meeting information{meet days, time_start, time_end, room number} from courses
+
+        get kiosk by serial number
+            extract {room number} from kiosk
+
+        compare stuff to get result:
+            - get current {time, day}
+            - compare {time, day} to {meet days, time_start, time_end}
+
+                - find room num that matches kiosk room num
+                    - compare {current day} to {meet days}
+                        - if they match
+                            - compare {current time} to {time_start, time_end}
+                                - if they match
+                                    - {true}
+                                - else
+                                    - {false}
+                        - else
+                            - {false}
+
+        result
+            - {true} -> {success}
+            - {false} -> {failure}
+
+
+    Mode 1:
+
+        get student by ID
+            extract {section numbers} from student
+
+        get kiosk by serial number
+            extract {room number} from kiosk
+
+        get exams by room number
+            extract exam info {sections, date, start, end} from exams
+
+        compare stuff to get result:
+            - get current {time, day}
+
+            - compare exams {sections} to student {section numbers}
+                - if they match
+                    - compare {time, day} to {date, start, end}
+                        - if they match
+                            - {true}
+                        - else
+                            - {false}
+                - else
+                    - {false}z
+ */
+
+

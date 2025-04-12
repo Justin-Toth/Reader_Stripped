@@ -20,6 +20,7 @@ public class RpiService : IRpiService
             return "10000000d340eb60";
         }
         
+        // Note: The home/pi directory is the default home directory for the user, currently must be changed to the user of the pi
         CommandSync("cat /proc/cpuinfo | grep Serial | cut -d ':' -f 2 > /home/pi/serial.txt");
 
         using var sr = new StreamReader("/home/pi/serial.txt");

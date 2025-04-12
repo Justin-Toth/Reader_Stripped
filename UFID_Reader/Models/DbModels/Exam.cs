@@ -1,4 +1,6 @@
-﻿namespace UFID_Reader.Models;
+﻿#nullable disable
+
+namespace UFID_Reader.Models.DbModels;
 
 public class Exam
 {

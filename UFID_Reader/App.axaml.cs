@@ -30,13 +30,14 @@ public partial class App : Application
         
         // Configure Services needed for Authentication
         const string connectionString = "Server=127.0.0.1;Port=3306;Database=ufid_database;User=myuser;Password=mypass;";
+        // const string connectionString = "Server=100.64.1.86;Port=3306;Database=ufid_database;User=myuser;Password=mypass;";
         collection.AddSingleton<IDbService, DbService>(x => new DbService(connectionString));
         collection.AddTransient<IAuthService, AuthService>();
         collection.AddTransient<IStudentService, StudentService>();
         collection.AddTransient<IKioskService, KioskService>();
         collection.AddTransient<IScheduleService, ScheduleService>();
         collection.AddTransient<IDateTimeService, DateTimeService>();
-
+        collection.AddTransient<IRpiService, RpiService>();
         
         
         collection.AddSingleton<Func<FrameNames, FrameViewModel>>(x => name => name switch

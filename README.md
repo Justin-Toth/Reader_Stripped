@@ -101,6 +101,10 @@ Unfortunately, we have not had time to extensively test this new system and ther
 
 ## Misc Information
 
+### Project Setup Video
+
+[![Setup](https://youtu.be/CkqPjx8nOnQ)]
+
 ### Public Course API
 
 #### Credit:

@@ -16,7 +16,6 @@ To set up and run the application, you will need:
 
    - [.NET 9.0 SDK](https://dotnet.microsoft.com/en-us/download) or newer installed on the Raspberry Pi.
      - Recommend using this [guide](https://www.petecodes.co.uk/install-and-use-microsoft-dot-net-9-with-the-raspberry-pi/)
-   - MySQL database (ensure the database is accessible from the Raspberry Pi).
 
 3. **Dependencies For Development**:
    - Avalonia template framework for the graphical interface.

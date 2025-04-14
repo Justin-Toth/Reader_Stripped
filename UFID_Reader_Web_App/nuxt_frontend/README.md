@@ -88,7 +88,7 @@ The frontend is organized into the following structure:
 
 - **`app.vue`**: The root component that defines the application layout.
 - **`components/`**: Contains reusable Vue components, including UI elements and layout components.
-  - **`ui/`**: Houses UI components built using `shadcn-vue`, a library for building accessible and customizable UI components.
+  - **`ui/`**: Houses UI components built using `shadcn-vue`, a library for building accessible and customizable UI components. Info can be found [here](https://www.shadcn-vue.com/)
 - **`layouts/`**: Defines application layouts, such as `default.vue` for authenticated pages and `noAuth.vue` for unauthenticated pages.
 - **`pages/`**: Contains the main pages of the application. Each `.vue` file corresponds to a route.
   - Example: `index.vue` is the dashboard, `students.vue` manages students, and `kiosks.vue` manages kiosks.

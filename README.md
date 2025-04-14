@@ -103,7 +103,7 @@ Unfortunately, we have not had time to extensively test this new system and ther
 
 ### Project Setup Video
 
-[![Setup](https://youtu.be/CkqPjx8nOnQ)]
+[![Watch the video](https://img.youtube.com/vi/CkqPjx8nOnQ/maxresdefault.jpg)](https://youtu.be/CkqPjx8nOnQ)
 
 ### Public Course API
 

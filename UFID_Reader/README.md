@@ -132,5 +132,6 @@ The application is organized as follows:
 
 - **Default Serial Number**: During development, a default serial number (`10000000d340eb60`) is used for testing on non-Raspberry Pi platforms.
 - **IDE**: Recommend using [Rider](https://www.jetbrains.com/rider/) for development of the application
+- **Interaction**: There is a hidden text field on the left bar of the application that can be found by hovering over the field with a mouse. This allows for interacting with the input field and typing ids manually and pressing enter during development/testing. You can also just swipe a id card using the scanner as well.
 
 ---

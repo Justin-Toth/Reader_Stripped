@@ -1,6 +1,6 @@
 # UFID Reader Database
 
-This folder contains everything needed to initialize and manage the database for the UFID Reader project. The database is hosted in a Docker container using MariaDB and is designed to store data for courses, exams, kiosks, users, and student rosters.
+This folder contains everything needed to initialize and manage the database for the UFID Reader project. The database is hosted in a Docker container using MariaDB and is designed to store data for courses, exams, kiosks, users, and student rosters while being lightweight and efficient.
 
 ---
 
@@ -8,7 +8,27 @@ This folder contains everything needed to initialize and manage the database for
 
 - **Database**: MariaDB hosted in a Docker container.
 - **Purpose**: Stores data for courses, exams, kiosks, users, and student rosters, which is accessed by the backend and Raspberry Pi application.
-- **Connection**: Accessible via LAN using TCP protocol.
+- **Connection**: Accessible via LAN connections using TCP protocol.
+
+---
+
+## Folder Structure
+
+- **`docker-compose.yml`**:
+
+  - Defines the Docker container for MariaDB.
+  - To intialize the container: (under this directory)
+    ```bash
+    docker-compose up -d
+    ```
+
+- **`/data`**:
+  - Contains the database backup and a Python script for grabbing UF semester data as SQL files to import into the database:
+    - `ufid_database_backup.sql`:
+      - Backup file for the database.
+    - `API-to-Database.py`:
+      - Script to use UF's public API to grab an entire semester's course information.
+      - **Note**: This file is currently out of date and needs updating. It still works but generates SQLite3 database files instead of MariaDB-compatible SQL files.
 
 ---
 
@@ -34,6 +54,7 @@ This folder contains everything needed to initialize and manage the database for
      docker-compose up -d
      ```
    - This will create and start the necessary Docker containers, including the MariaDB container.
+   - Docker network is also instantiated for groundwork towards containerizing other components into docker
 
 2. **Access the Database**:
 
@@ -92,12 +113,12 @@ To restore the database from a backup:
 To allow access from other machines on the same network:
 
 1. Ensure the container is running.
-2. Access the MariaDB container:
+2. Access the MariaDB container as root user:
 
    ```bash
-   docker exec -it ufid_mariadb mariadb -u myuser -p
+   docker exec -it ufid_mariadb mariadb -u root -p
    ```
-
+   - **Password**: `mypass` (should probably be updated for obvious security reasons)
 3. Grant access to other machines:
 
    ```sql
@@ -107,9 +128,11 @@ To allow access from other machines on the same network:
 
    - **Note**: The `@'%'` allows connections from any IP. For better security, replace `%` with a specific IP address.
 
+
 4. Open the firewall on the host machine:
 
    - Add an inbound rule to allow TCP traffic on port `3306`.
+   - **Note**: This adds an inboud rule that exposes a port to the DB which on a public network can be risky. For better security, consider exposing this port to only VPNs or private networks. Additionally if ported to a cloud VM, be sure to configure security groups to allow inbound traffic.
 
 5. Find the host machine's IP address:
 
@@ -131,29 +154,9 @@ To allow access from other machines on the same network:
 
 ---
 
-## Folder Structure
-
-- **`docker-compose.yml`**:
-
-  - Defines the Docker container for MariaDB.
-  - To start the container:
-    ```bash
-    docker-compose up -d
-    ```
-
-- **`/data`**:
-  - Contains the database backup and a Python script for grabbing UF semester data as SQL files to import into the database:
-    - `ufid_database_backup.sql`:
-      - Backup file for the database.
-    - `API-to-Database.py`:
-      - Script to use UF's public API to grab an entire semester's course information.
-      - **Note**: This file is currently out of date and needs updating. It still works but generates SQLite3 database files instead of MariaDB-compatible SQL files.
-
----
-
 ## Notes
 
-- The database is currently hosted locally, and changes do not persist across environments. Use the export/import process to share updates.
+- Because the docker container relies on LAN connectoins, and changes do not persist across environments/different docker containers. Use the export/import process to share updates.
 - For development, it is recommended to use a Docker GUI for easier management of containers.
 
 ---

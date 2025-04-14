@@ -21,6 +21,7 @@ To set up and run the application, you will need:
 3. **Dependencies For Development**:
    - Avalonia template framework for the graphical interface.
      - May not be needed as is just used to setup project
+     - Relevant info can be found [here](https://docs.avaloniaui.net/docs/get-started/install)
 
 ---
 

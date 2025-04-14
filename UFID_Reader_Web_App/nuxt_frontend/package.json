@@ -1,5 +1,5 @@
 {
-  "name": "reader",
+  "name": "nuxt_frontend",
   "private": true,
   "type": "module",
   "scripts": {

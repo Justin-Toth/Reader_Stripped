@@ -8,7 +8,13 @@ A link to the original project repository can be found [here](https://github.com
 
 ## Project Components
 
-### 1. **WebApp**
+### 1. **Database**
+
+The database is hosted in a Docker container using MariaDB. It stores data for courses, exams, kiosks, users, and student rosters. The backend and Raspberry Pi application interact with this database to validate and manage attendance data.
+
+- **Details**: [Database README](Database/README.md)
+
+### 2. **WebApp**
 
 #### **Backend**
 
@@ -24,7 +30,7 @@ The frontend is a Nuxt 3 application that serves as the user interface for manag
 
 ---
 
-### 2. **Raspberry Pi Application**
+### 3. **Raspberry Pi Application**
 
 The Raspberry Pi application runs on kiosks and handles UFID validation, kiosk registration, and interaction with the backend. It is built using .NET and Avalonia for a cross-platform graphical interface.
 
@@ -32,19 +38,11 @@ The Raspberry Pi application runs on kiosks and handles UFID validation, kiosk r
 
 ---
 
-### 3. **Kiosk Case**
+### 4. **Kiosk Case**
 
 The kiosk case is the physical housing for the Raspberry Pi and other hardware components. It is designed to securely hold the hardware and provide a user-friendly interface.
 
 - **Details**: [Kiosk Case README](Misc/KioskCase/README.md)
-
----
-
-### 4. **Database**
-
-The database is hosted in a Docker container using MariaDB. It stores data for courses, exams, kiosks, users, and student rosters. The backend and Raspberry Pi application interact with this database to validate and manage attendance data.
-
-- **Details**: [Database README](Database/README.md)
 
 ---
 

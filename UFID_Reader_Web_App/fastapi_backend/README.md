@@ -27,7 +27,7 @@
 1. Run the application:
 
    ```sh
-   uv run run_app.py
+   uv run run.py
    ```
 
 2. The server will be running at `http://127.0.0.1:8000`.

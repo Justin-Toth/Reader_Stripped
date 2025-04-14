@@ -42,6 +42,8 @@ To set up and run the application, you will need:
 
 3. **Build the Application**:
 
+   - If doing development on a windows/mac machine and locally hosting the database, you can start here for setting up the application.
+
    ```bash
    dotnet build
    ```

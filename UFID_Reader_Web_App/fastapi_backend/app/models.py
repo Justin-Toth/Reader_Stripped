@@ -62,3 +62,14 @@ class Course(Base):
     meet_time_end = Column(String(16))
     meet_room = Column(String(8))
     
+
+class Timesheet(Base):
+    __tablename__ = "timesheets"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    ufid = Column(String(8), index=True)
+    full_name = Column(String(50))
+    course_code = Column(String(8), index=True)
+    section_num = Column(String(5), index=True)
+    date = Column(String(16))
+    swipe_time = Column(String(16))

@@ -71,7 +71,7 @@ public class AuthService(
             await timesheetService.RegisterTimesheetEntry(
                 student.UFID, student.Full_Name,
                 validCourses[0].course_code, validCourses[0].class_number,
-                DateTime.Today.ToString("MM/dd/yyyy"), DateTime.Now.ToString("HH:mm")
+                DateTime.Today.ToString("MM/dd/yyyy"), DateTime.Now.ToString("hh:mm:ss tt")
             );
             
         return validCourses.Count != 0

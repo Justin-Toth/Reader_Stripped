@@ -37,6 +37,7 @@ public partial class App : Application
         collection.AddTransient<IKioskService, KioskService>();
         collection.AddTransient<IScheduleService, ScheduleService>();
         collection.AddTransient<IDateTimeService, DateTimeService>();
+        collection.AddTransient<ITimesheetService, TimesheetService>();
         collection.AddTransient<IRpiService, RpiService>();
         
         

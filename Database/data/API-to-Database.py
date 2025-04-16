@@ -1,69 +1,8 @@
-'''
 import requests
-
-url = "https://one.ufl.edu/apix/soc/schedule/"
-
-term = 2248
-
-# Initialize query parameters
-params = {
-    "category": "CWSP",
-    "term": term,  # Adjusted to the term you specified 6W1 for A. 6W2 for B. 1 for C
-    "last-control-number": 0,
-}
-
-response = requests.get(url, params=params)
-#response = requests.get(url)
-
-#print(response)
-
-# Check if the request was successful
-if response.status_code == 200:
-    
-    results = []
-    #print(response)
-    data = response.json()
-    #print(data)
-
-    courses = data[0].get('COURSES', [])
-    retrievedrows = data[0].get('RETRIEVEDROWS', 0)
-    lastcontrolnumber = data[0].get('LASTCONTROLNUMBER', 0)
-
-    for course in courses:
-        code = course.get('code')
-        #print(code)
-        for section in course.get('sections', []):
-            class_number = section.get('classNumber')
-            instructors = ', '.join([instructor['name'] for instructor in section['instructors']])
-            for time in section['meetTimes']:
-                meetNum = time['meetNo']
-                meet_time_begin = time['meetTimeBegin']
-                meet_time_end = time['meetTimeEnd']
-                roomCode = time['meetBuilding'] + str(time['meetRoom'])  # Combine building and room
-                meetDays = time['meetDays']
-                results.append({
-                    'code': code,
-                    'classNumber': class_number,
-                    'instructor(s)': instructors,
-                    'meetNo': meetNum,
-                    'meetDays': meetDays,
-                    'meetTimeBegin': meet_time_begin,
-                    'meetTimeEnd': meet_time_end,
-                    'meetRoomCode': roomCode
-                })
-    print(results)
-'''
-
-import requests
-import sqlite3
 import sys
-import json
 
-def fetch_courses(term, course_code=None, class_num=None):
-    # URL to send the GET request to
+def fetch_courses(term):
     url = "https://one.ufl.edu/apix/soc/schedule/"
-
-    # Initialize query parameters
     params = {
         "category": "CWSP",
         "term": term,
@@ -71,16 +10,13 @@ def fetch_courses(term, course_code=None, class_num=None):
     }
 
     course_results = []
-    total_sections = 0  # Counter for the number of courses processed
+    total_sections = 0
 
     while True:
-        # Send the GET request
         response = requests.get(url, params=params)
 
-        # Check if the request was successful
         if response.status_code == 200:
             data = response.json()
-
             courses = data[0].get('COURSES', [])
             retrievedrows = data[0].get('RETRIEVEDROWS', 0)
             lastcontrolnumber = data[0].get('LASTCONTROLNUMBER', 0)
@@ -88,11 +24,11 @@ def fetch_courses(term, course_code=None, class_num=None):
             if retrievedrows == 0 and lastcontrolnumber == 0:
                 break
 
-            # Iterate through each course in the courses list
             for course in courses:
                 course_code = course.get('code')
                 course_name = course.get('name')
                 sections = course.get('sections', [])
+
                 for section in sections:
                     class_number = section.get('classNumber')
                     instructors = ', '.join([instructor['name'] for instructor in section['instructors']])
@@ -100,9 +36,9 @@ def fetch_courses(term, course_code=None, class_num=None):
                         meetNum = time['meetNo']
                         meet_time_begin = time['meetTimeBegin']
                         meet_time_end = time['meetTimeEnd']
-                        roomCode = time['meetBuilding'] + str(time['meetRoom'])  # Combine building and room
+                        roomCode = time['meetBuilding'] + str(time['meetRoom'])
                         meetDays = time['meetDays']
-                        
+
                         course_results.append({
                             'code': course_code,
                             'classNumber': class_number,
@@ -115,203 +51,144 @@ def fetch_courses(term, course_code=None, class_num=None):
                             'name': course_name
                         })
 
-                    # Update the progress indicator
-                    total_sections += 1
-                    sys.stdout.write(f"\rSections loaded: {total_sections}")
-                    sys.stdout.flush()
+                        total_sections += 1
+                        sys.stdout.write(f"\rSections loaded: {total_sections}")
+                        sys.stdout.flush()
 
             params['last-control-number'] = lastcontrolnumber
-
         else:
             print(f"Failed to retrieve data: {response.status_code}")
             break
 
-    print()  # Move to the next line after loading is complete
+    print()
     return course_results
 
-def save_to_db(db_name, course_data):
-    conn = sqlite3.connect(db_name)
-    cursor = conn.cursor()
+  
+def escape_single_quotes(value):
+    # Escape single quotes by doubling them
+    return value.replace("'", "''")
 
-    cursor.execute('DROP TABLE IF EXISTS courses')
+def remove_semicolons(value):
+    # Remove semicolons from the string
+    return value.replace(";", "")
 
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS courses (
-            course_code TEXT,
-            course_name TEXT,
-            class_number TEXT,
-            instructors TEXT,
-            meet_no TEXT,
-            meet_days TEXT,
-            meet_time_begin TEXT,
-            meet_time_end TEXT,
-            meet_room_code TEXT,
-            PRIMARY KEY (class_number, meet_no)
-        )
-    ''')
+def generate_course_sql(course_data, sql_filename):
+    lines = []
+    lines.append("DROP TABLE IF EXISTS courses;\n")
+    lines.append("""
+CREATE TABLE courses (
+    course_code VARCHAR(20),
+    course_name TEXT,
+    class_number VARCHAR(20),
+    instructors TEXT,
+    meet_no VARCHAR(10),
+    meet_days TEXT,
+    meet_time_begin VARCHAR(10),
+    meet_time_end VARCHAR(10),
+    meet_room_code VARCHAR(20),
+    PRIMARY KEY (class_number, meet_no)
+);\n
+""")
+
+    count = 0
+    seen = set()
+    for course in course_data:
+        key = (course["classNumber"], course["meetNo"])
+        if key in seen:
+            continue
+        seen.add(key)
+        count += 1
+
+        # Remove semicolons and escape single quotes from all fields
+        course_code = escape_single_quotes(remove_semicolons(course["code"]))
+        course_name = escape_single_quotes(remove_semicolons(course["name"]))
+        class_number = course["classNumber"]
+        instructors = escape_single_quotes(remove_semicolons(course["instructor(s)"]))
+        
+        # Convert meetDays list to a string, remove semicolons, and escape single quotes
+        meet_days = ', '.join(course["meetDays"]).replace(";", "").replace("'", "''") if isinstance(course["meetDays"], list) else str(course["meetDays"]).replace(";", "").replace("'", "''")
+        
+        # Remove semicolons and escape single quotes from time-related fields
+        meet_time_begin = escape_single_quotes(remove_semicolons(course["meetTimeBegin"]))
+        meet_time_end = escape_single_quotes(remove_semicolons(course["meetTimeEnd"]))
+        meet_room_code = escape_single_quotes(remove_semicolons(course["meetRoomCode"]))
+
+        # Generate the SQL insert statement
+        insert_stmt = f"""INSERT INTO courses (course_code, course_name, class_number, instructors, meet_no, meet_days, meet_time_begin, meet_time_end, meet_room_code)
+VALUES ('{course_code}', '{course_name}', '{class_number}', '{instructors}', '{course["meetNo"]}', '{meet_days}', '{meet_time_begin}', '{meet_time_end}', '{meet_room_code}');\n"""
+        lines.append(insert_stmt)
+
+    # Write the SQL statements to a file
+    with open(sql_filename, "w", encoding="utf-8") as f:
+        f.writelines(lines)
+
+    print(f"\nTotal course entries to insert: {count}")
+    return count
+
+
+def normalize_name(name):
+    # Normalize course names for consistency in comparison
+    return remove_semicolons(name.strip().lower())
+
+def generate_exam_sql(course_data, sql_filename):
+    lines = []
+    lines.append("DROP TABLE IF EXISTS exams;\n")
+    lines.append("""
+CREATE TABLE exams (
+    course_code VARCHAR(20),
+    course_name VARCHAR(255),
+    instructors TEXT,
+    sections TEXT,
+    room TEXT,
+    date TEXT,
+    start_time TEXT,
+    end_time TEXT,
+    PRIMARY KEY (course_code, course_name)
+);\n
+""")
+
+    course_dict = {}
 
     for course in course_data:
-        code = course["code"]
-        name = course["name"]
-        classNumber = course["classNumber"]
-        instructor = course["instructor(s)"]
-        meetNo = course["meetNo"]
-        meetDays = str(course["meetDays"])
-        meetTimeBegin = course["meetTimeBegin"]
-        meetTimeEnd = course["meetTimeEnd"]
-        meetRoomCode = course["meetRoomCode"]
+        normalized_key = (course["code"], normalize_name(course["name"]))
+        if normalized_key not in course_dict:
+            course_dict[normalized_key] = {
+                "original_name": course["name"],  # preserve original case for insert
+                "instructors": set(),
+                "sections": set()
+            }
 
-        # Check if the class_number already exists in the database
-        cursor.execute('''
-            SELECT * FROM courses WHERE class_number = ? AND meet_no = ?
-        ''', (classNumber, meetNo))
-        
-        existing_entry = cursor.fetchone()
+        course_dict[normalized_key]["instructors"].add(course["instructor(s)"])
+        course_dict[normalized_key]["sections"].add(course["classNumber"])
 
-        if not existing_entry:
-            # Print details of the existing entry and the new duplicate
-            #print(f"Duplicate found:")
-            #print(f"Existing entry - Class Number: {class_number}, Course Code: {existing_entry[0]}")
-            #print(f"New entry - Class Number: {class_number}, Course Code: {course_code}")
-        #else:
-            # Insert new entry
-            cursor.execute('''
-                INSERT INTO courses (course_code, course_name, class_number, instructors, meet_no, meet_days, meet_time_begin, meet_time_end, meet_room_code)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (code, name, classNumber, instructor, meetNo, meetDays, meetTimeBegin, meetTimeEnd, meetRoomCode))
+    for (code, _), data in course_dict.items():
+        original_name = escape_single_quotes(remove_semicolons(data["original_name"]))
+        instructors = escape_single_quotes(remove_semicolons(', '.join(sorted(data["instructors"]))))
+        sections = escape_single_quotes(remove_semicolons(', '.join(sorted(str(s) for s in data["sections"]))))
 
-    # Commit changes and close the connection
-    conn.commit()
-    conn.close()
+        insert_stmt = f"""INSERT INTO exams (course_code, course_name, instructors, sections)
+VALUES ('{escape_single_quotes(code)}', '{original_name}', '{instructors}', '{sections}');\n"""
+        lines.append(insert_stmt)
 
-def prof_profile(db_name, term):
-    # Step 1: Connect to the Database
-    conn = sqlite3.connect(db_name)  # Replace with your database filename
-    cursor = conn.cursor()
+    with open(sql_filename, "w", encoding="utf-8") as f:
+        f.writelines(lines)
 
-    # Step 2: Query the Data
-    query = '''
-    SELECT instructors, course_code, course_name, class_number
-    FROM courses
-    ORDER BY instructors, course_code, course_name, class_number
-    '''
-    cursor.execute(query)
-    rows = cursor.fetchall()
+    print(f"Total exam entries to insert: {len(course_dict)}")
+    return len(course_dict)
+  
 
-    # Step 3: Organize Data by Instructor -> Course Code + Course Name -> Section Number
-    # Structure: { instructor: { "course_code: course_name": set(section_number, ...) } }
-    organized_data = {}
-
-    for row in rows:
-        instructor_field, course_code, course_name, section_number = row
-
-        # Step 4: Split the instructor field into individual names
-        instructors = [name.strip() for name in instructor_field.split(',')]
-
-        for instructor in instructors:
-            # Initialize dictionary structure if not already present for the instructor
-            if instructor not in organized_data:
-                organized_data[instructor] = {}
-
-            # Combine course code and course name
-            course_key = f"{course_code}: {course_name}"
-
-            # Initialize set for course if not already present
-            if course_key not in organized_data[instructor]:
-                organized_data[instructor][course_key] = set()
-
-            # Add the section number to the course set (automatically ensures uniqueness)
-            organized_data[instructor][course_key].add(section_number)
-
-    # Step 5: Convert sets to lists for JSON serialization
-    for instructor, courses in organized_data.items():
-        for course_key in courses:
-            organized_data[instructor][course_key] = list(courses[course_key])
-
-    # Step 6: Output the Data
-    with open(f'organized_courses_{term}.json', 'w') as f:
-        json.dump(organized_data, f, indent=4)
-
-    # Close the connection
-    conn.close()
-
-    print(f"Data organized with unique sections and saved to organized_courses_{term}.json")
-
-def exam_database(db_name, exam_db_name):
-    source_conn = sqlite3.connect(db_name)
-    source_cursor = source_conn.cursor()
-
-    # Connect to the new database
-    new_conn = sqlite3.connect(exam_db_name)
-    new_cursor = new_conn.cursor()
-
-    # Create the new table with the specified fields
-    new_cursor.execute('''
-        CREATE TABLE IF NOT EXISTS courses (
-            course_code TEXT,
-            course_name TEXT,
-            instructors TEXT,
-            sections TEXT,
-            room TEXT DEFAULT NULL,
-            date TEXT DEFAULT NULL,
-            start_time TEXT DEFAULT NULL,
-            end_time TEXT DEFAULT NULL,
-            PRIMARY KEY (course_code, course_name)
-        )
-    ''')
-
-    # Query to retrieve all relevant data from the source database
-    source_cursor.execute('''
-        SELECT 
-            course_code, 
-            course_name, 
-            instructors, 
-            class_number
-        FROM courses
-    ''')
-
-    # Use a dictionary to collect unique instructors and sections for each course
-    course_data = {}
-
-    for row in source_cursor.fetchall():
-        course_code, course_name, instructor, section = row
-        key = (course_code, course_name)
-
-        # Initialize the entry in the dictionary if it doesn't exist
-        if key not in course_data:
-            course_data[key] = {"instructors": set(), "sections": set()}
-
-        # Add instructors and sections to the sets (automatically handles duplicates)
-        course_data[key]["instructors"].add(instructor)
-        course_data[key]["sections"].add(section)
-
-    # Insert the processed data into the new database
-    for (course_code, course_name), data in course_data.items():
-        instructors = ', '.join(data["instructors"])  # Convert sets to comma-separated strings
-        sections = ', '.join(data["sections"])
-
-        new_cursor.execute('''
-            INSERT INTO courses (course_code, course_name, instructors, sections)
-            VALUES (?, ?, ?, ?)
-        ''', (course_code, course_name, instructors, sections))
-
-    # Commit the changes and close the connections
-    new_conn.commit()
-    source_conn.close()
-    new_conn.close()
 
 def main():
     term = input("Enter the term (e.g., 1, 6W1, 6W2): ")
-    db_name = f"courses_{term}.db"
-    exam_db_name = f"exams_{term}.db"
+    course_sql = f"courses_{term}.sql"
+    exam_sql = f"exams_{term}.sql"
 
     course_data = fetch_courses(term)
-    save_to_db(db_name, course_data)
-    prof_profile(db_name, term)
 
-    exam_database(db_name, exam_db_name)
+    course_count = generate_course_sql(course_data, course_sql)
+    exam_count = generate_exam_sql(course_data, exam_sql)
 
-    print(f"\nData successfully saved to {db_name}")
+    print(f"\nSQL files generated:\n- {course_sql}\n- {exam_sql}")
 
 if __name__ == "__main__":
     main()

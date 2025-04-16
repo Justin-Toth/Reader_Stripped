@@ -28,7 +28,8 @@ This folder contains everything needed to initialize and manage the database for
       - Backup file for the database.
     - `API-to-Database.py`:
       - Script to use UF's public API to grab an entire semester's course information.
-      - **Note**: This file is currently out of date and needs updating. It still works but generates SQLite3 database files instead of MariaDB-compatible SQL files.
+    - `insert_into_db.py`:
+      - Script to import any course/class sql file into the db.
 
 ---
 

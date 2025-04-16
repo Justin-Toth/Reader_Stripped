@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.JavaScript;
 using System.Threading.Tasks;
 using UFID_Reader.Models;
 using UFID_Reader.Models.DbModels;
@@ -16,7 +17,8 @@ public class AuthService(
     IStudentService studentService,
     IKioskService kioskService,
     IScheduleService scheduleService,
-    IDateTimeService dateTimeService) : IAuthService
+    IDateTimeService dateTimeService,
+    ITimesheetService timesheetService) : IAuthService
 {
     public async Task<AuthResult> AuthenticateSwipeAsync(string scannerInput, string mode, string serialNumber)
     {
@@ -37,13 +39,13 @@ public class AuthService(
 
         return mode switch
         {
-            "class" => await AuthenticateClassMode(sectionNumbers, roomNumber, currentDay, currentTime),
-            "exam" => await AuthenticateExamMode(sectionNumbers, roomNumber, currentDay, currentTime),
+            "class" => await AuthenticateClassMode(student, sectionNumbers, roomNumber, currentDay, currentTime),
+            "exam" => await AuthenticateExamMode(student, sectionNumbers, roomNumber, currentDay, currentTime),
             _ => AuthResult.Failure("Invalid mode")
         };
     }
 
-    private async Task<AuthResult> AuthenticateClassMode(List<string> sectionNumbers, string roomNumber,
+    private async Task<AuthResult> AuthenticateClassMode(Student student, List<string> sectionNumbers, string roomNumber,
         string currentDay, TimeSpan currentTime)
     {
         var courses = await scheduleService.GetCoursesBySectionNumbersAsync(sectionNumbers);
@@ -64,13 +66,20 @@ public class AuthService(
             .ToList();
         
         DebugPrintInfo3(validCourses);
+        
+        if (validCourses.Count != 0)
+            await timesheetService.RegisterTimesheetEntry(
+                student.UFID, student.Full_Name,
+                validCourses[0].course_code, validCourses[0].class_number,
+                DateTime.Today.ToString("MM/dd/yyyy"), DateTime.Now.ToString("HH:mm")
+            );
             
         return validCourses.Count != 0
             ? AuthResult.Success()
             : AuthResult.Failure("Student is not scheduled for a class at this time and location");
     }
     
-    private async Task<AuthResult> AuthenticateExamMode(List<string> sectionNumbers, string roomNumber,
+    private async Task<AuthResult> AuthenticateExamMode(Student student, List<string> sectionNumbers, string roomNumber,
         string currentDay, TimeSpan currentTime)
     {
         var exams = await scheduleService.GetExamsByRoomNumberAsync(roomNumber);
@@ -86,6 +95,8 @@ public class AuthService(
             var hasMatchingSection = examSections.Intersect(sectionNumbers).Any();
             if (!hasMatchingSection) continue;
 
+            // Cant be null as we already checked for hasMatchingSection
+            var matchingSection = examSections.FirstOrDefault(section => sectionNumbers.Contains(section));
             var examDate = DateTime.Parse(exam.date);
             var examStart = DateTime.Parse(exam.start_time).TimeOfDay;
             var examEnd = DateTime.Parse(exam.end_time).TimeOfDay;
@@ -93,6 +104,12 @@ public class AuthService(
             if (examDate == DateTime.Today && currentTime >= examStart && currentTime <= examEnd)
             {
                 DebugPrintInfo5(exam);
+                
+                await timesheetService.RegisterTimesheetEntry(
+                    student.UFID, student.Full_Name,
+                    exam.course_code, matchingSection,
+                    DateTime.Today.ToString("MM/dd/yyyy"), DateTime.Now.ToString("hh:mm:ss tt")
+                );
                 return AuthResult.Success();
             }
         }
@@ -169,130 +186,5 @@ public class AuthService(
         Console.WriteLine();
     }
 }
-
-/*
-    var result = false;
-
-        if (mode == "class")
-        {
-            
-        
-        }
-        else if (mode == "exam")
-        {
-            var exams = await GetExamsByRoomNumberAsync(roomNumber);
-            if (exams == null)
-            {
-                Console.WriteLine("Exams not found");
-                return false;
-            }
-
-            Console.WriteLine($"Exams: {string.Join(", ", exams.Select(exam => exam.course_code))}");
-
-            foreach (var exam in exams)
-            {
-                Console.WriteLine();
-                Console.WriteLine($"Exam For Class: {exam.course_code}");
-
-                foreach (var section in exam.sections.Split(','))
-                {
-                    Console.WriteLine($"Section: {section}");
-
-                    if (!sectionNumbers.Contains(section)) continue;
-                    var examDate = DateTime.Parse(exam.date);
-                    var examStart = DateTime.Parse(exam.start_time).TimeOfDay;
-                    var examEnd = DateTime.Parse(exam.end_time).TimeOfDay;
-
-                    result = examDate == DateTime.Today && currentTime >= examStart && currentTime <= examEnd;
-
-                    // Debug: print all the data to console
-                    Console.WriteLine();
-                    Console.WriteLine($"Student: {student.Full_Name}");
-                    Console.WriteLine($"UFID: {student.UFID}");
-                    Console.WriteLine($"Kiosk: {kiosk.serial_num}");
-                    Console.WriteLine($"Kiosk Room Number: {roomNumber}");
-                    Console.WriteLine($"Section Numbers: {string.Join(", ", sectionNumbers)}");
-                    Console.WriteLine();
-
-                    Console.WriteLine($"Exam For Class: {exam.course_code}");
-                    Console.WriteLine($"Exam Date: {exam.date}");
-                    Console.WriteLine($"Exam Start: {exam.start_time}");
-                    Console.WriteLine($"Exam End: {exam.end_time}");
-                    Console.WriteLine($"Exam Room Number: {exam.room}");
-                    Console.WriteLine();
-
-                    Console.WriteLine($"Current Day: {currentDay}");
-                    Console.WriteLine($"Current Time: {currentTime}");
-                    Console.WriteLine($"Result: {result}");
-                }
-            }
-
-        }
-        else
-        {
-            Console.WriteLine("Invalid mode");
-            return false;
-        }
-
-        return result;
-    }
-}
-
-/*
-    Mode 0 for now
-
-        get student by ID
-            extract {section numbers} from student
-
-        get courses by section numbers
-            extract meeting information{meet days, time_start, time_end, room number} from courses
-
-        get kiosk by serial number
-            extract {room number} from kiosk
-
-        compare stuff to get result:
-            - get current {time, day}
-            - compare {time, day} to {meet days, time_start, time_end}
-
-                - find room num that matches kiosk room num
-                    - compare {current day} to {meet days}
-                        - if they match
-                            - compare {current time} to {time_start, time_end}
-                                - if they match
-                                    - {true}
-                                - else
-                                    - {false}
-                        - else
-                            - {false}
-
-        result
-            - {true} -> {success}
-            - {false} -> {failure}
-
-
-    Mode 1:
-
-        get student by ID
-            extract {section numbers} from student
-
-        get kiosk by serial number
-            extract {room number} from kiosk
-
-        get exams by room number
-            extract exam info {sections, date, start, end} from exams
-
-        compare stuff to get result:
-            - get current {time, day}
-
-            - compare exams {sections} to student {section numbers}
-                - if they match
-                    - compare {time, day} to {date, start, end}
-                        - if they match
-                            - {true}
-                        - else
-                            - {false}
-                - else
-                    - {false}z
- */
 
 

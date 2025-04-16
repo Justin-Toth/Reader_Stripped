@@ -4,6 +4,7 @@
         { name: "Students", path: "/students", icon: "formkit:people" },
         { name: "Kiosks", path: "/kiosks", icon: "lucide:monitor" },
         { name: "Exams", path: "/exams", icon: "quill:paper" },
+        { name: "Timesheet", path: "/timesheet", icon: "lucide:clock" },
         { name: "Settings", path: "/settings", icon: "lucide:settings" },
 
     ])

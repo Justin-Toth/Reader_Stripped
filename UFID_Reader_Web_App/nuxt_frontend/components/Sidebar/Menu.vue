@@ -4,6 +4,7 @@ const items = ref([
   { name: "Students", path: "/students", icon: "formkit:people" },
   { name: "Kiosks", path: "/kiosks", icon: "lucide:monitor" },
   { name: "Exams", path: "/exams", icon: "quill:paper" },
+  { name: "Timesheet", path: "/timesheet", icon: "lucide:clock" },
 ])
 </script>
 

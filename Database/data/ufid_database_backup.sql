@@ -8249,8 +8249,8 @@ CREATE TABLE `exams` (
 LOCK TABLES `exams` WRITE;
 /*!40000 ALTER TABLE `exams` DISABLE KEYS */;
 INSERT INTO `exams` VALUES
-('ABE2012C','Introduction to Biological Engineering','Ana Martin-Ryals','10065, 10066','NSC215','11/09/2024','07:17 PM','09:17 PM'),
-('ABE3612C','Heat and Mass Transfer in Biological Systems','William Pelletier','10067','','08/13/2024','12:NaN AM','12:NaN AM'),
+('ABE2012C','Introduction to Biological Engineering','Ana Martin-Ryals','10065, 10066','NSC215','04/16/2025','12:01 AM','11:59 PM'),
+('ABE3612C','Heat and Mass Transfer in Biological Systems','William Pelletier','10067',NULL,NULL,NULL,NULL),
 ('ABE4042C','Biological Engineering Design 1','Ziynet Boz, Richard Scholtz','20852',NULL,NULL,NULL,NULL),
 ('ABE4171','Power and Machines for Biological Systems','Thomas Burks','10068',NULL,NULL,NULL,NULL),
 ('ABE4231C','Irrigation and Drainage Engineering','Richard Scholtz','10069',NULL,NULL,NULL,NULL),
@@ -8752,7 +8752,7 @@ INSERT INTO `exams` VALUES
 ('CEN4072','Software Testing and Verification','Stephen Thebaut','29219',NULL,NULL,NULL,NULL),
 ('CEN4721','Human-Computer Interaction','Neha Rani','11065',NULL,NULL,NULL,NULL),
 ('CEN4722','User Experience Design','Andrew Maxim','11066',NULL,NULL,NULL,NULL),
-('CEN4908C','Computer Engineering Design 2','Carsten Thue-Bludworth','29563','NSC215','3/12/2025','12:01 AM','11:59 PM'),
+('CEN4908C','Computer Engineering Design 2','Carsten Thue-Bludworth','29563','NSC215','04/16/2025','12:01 AM','11:59 PM'),
 ('CEN5035','Software Engineering','Stephen Thebaut','26413',NULL,NULL,NULL,NULL),
 ('CEN5728','User Experience Design','Christina Mccune','22402',NULL,NULL,NULL,NULL),
 ('CEN6070','Software Testing and Verification','Stephen Thebaut','29220',NULL,NULL,NULL,NULL),
@@ -10975,9 +10975,15 @@ CREATE TABLE `kiosks` (
 LOCK TABLES `kiosks` WRITE;
 /*!40000 ALTER TABLE `kiosks` DISABLE KEYS */;
 INSERT INTO `kiosks` VALUES
+('1000000040f94704','NSC215'),
 ('10000000d340eb60','NSC215'),
 ('10000000d340eb61','ANS102'),
-('10000000d340eb62','ROG110');
+('10000000d340eb62','ROG110'),
+('10000000d340eb65','NSC215'),
+('10000000d340eb66','NSC210'),
+('10000000d340eb69','NSC210'),
+('10000000d340eb77','NSC215'),
+('10000000d340eb99','NSC215');
 /*!40000 ALTER TABLE `kiosks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -11010,8 +11016,50 @@ CREATE TABLE `students` (
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
 INSERT INTO `students` VALUES
-('91547610','0000000000000000','Justin Toth','justintoth@ufl.edu','29563','18806','20852',NULL,NULL);
+('00000000','0000000000000000','Test Student','TestStudent@ufl.edu','29563',NULL,NULL,NULL,NULL),
+('10202020','1234567890123456','Test 2','Test2@ufl.edu','29563','18806',NULL,NULL,NULL),
+('11111111','1111111111111111','Test Showing','Test@ufl.edu','22331',NULL,NULL,NULL,NULL),
+('91547610','0000000000000000','Justin Toth','justintoth@ufl.edu','29563','10065','20852',NULL,NULL),
+('91547611','0101010101010101','John Doe','JohnDoe@ufl.edu','29563','11111',NULL,NULL,NULL),
+('91547675','1111111111111111','Jane Smith','JaneSmith@ufl.edu','22331','11111',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `timesheets`
+--
+
+DROP TABLE IF EXISTS `timesheets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `timesheets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ufid` varchar(8) DEFAULT NULL,
+  `full_name` varchar(50) DEFAULT NULL,
+  `course_code` varchar(8) DEFAULT NULL,
+  `section_num` varchar(5) DEFAULT NULL,
+  `date` varchar(16) DEFAULT NULL,
+  `swipe_time` varchar(16) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ix_timesheets_ufid` (`ufid`),
+  KEY `ix_timesheets_course_code` (`course_code`),
+  KEY `ix_timesheets_section_num` (`section_num`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `timesheets`
+--
+
+LOCK TABLES `timesheets` WRITE;
+/*!40000 ALTER TABLE `timesheets` DISABLE KEYS */;
+INSERT INTO `timesheets` VALUES
+(1,'91547610','Justin Toth','CEN4908C','29563','04/16/2025','2:35:11 AM'),
+(2,'91547610','Justin Toth','CEN4908C','29563','04/16/2025','02:36:02 AM'),
+(3,'91547610','Justin Toth','CEN4908C','29563','04/16/2025','02:36:32 AM'),
+(4,'91547610','Justin Toth','CEN4908C','29563','04/16/2025','09:50:29 PM'),
+(5,'91547610','Justin Toth','ABE2012C','10065','04/16/2025','09:51:42 PM');
+/*!40000 ALTER TABLE `timesheets` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -11055,4 +11103,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2025-03-12 21:56:45
+-- Dump completed on 2025-04-17  1:53:29

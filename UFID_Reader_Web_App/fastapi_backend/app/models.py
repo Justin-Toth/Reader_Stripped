@@ -41,9 +41,9 @@ class Exam(Base):
 
     course_code = Column(String(8), primary_key=True, index=True)
     course_name = Column(String(255))
-    instructors = Column(String(255))
+    instructors = Column(String(1000))
     sections = Column(String(255))
-    room = Column(String(8))
+    room = Column(String(16))
     date = Column(String(16))
     start_time = Column(String(16))
     end_time = Column(String(16))
@@ -51,16 +51,16 @@ class Exam(Base):
 
 class Course(Base):
     __tablename__ = "courses"
-
-    course_code = Column(String(8), index=True)
+      
+    course_code = Column(String(8), primary_key=True)
+    class_num = Column(Integer, primary_key=True)  
+    meet_no = Column(Integer, primary_key=True)
     course_name = Column(String(255))
-    class_num = Column(String(5), primary_key=True, index=True)
-    instructors = Column(String(255))
-    meet_no = Column(String(1), primary_key=True, index=True)
+    instructors = Column(String(1000))
     meet_days = Column(String(16))
     meet_time_begin = Column(String(16))
     meet_time_end = Column(String(16))
-    meet_room = Column(String(8))
+    meet_room = Column(String(16))
     
 
 class Timesheet(Base):
